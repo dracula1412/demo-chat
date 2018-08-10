@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
+const SocketServer = require('ws').Server;
 
 /**
  * Get port from environment and store in Express.
@@ -88,3 +89,17 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+// initialize the WebSocket server instance
+const wss = new SocketServer({ server });
+
+//init Websocket ws and handle incoming connect requests
+wss.on('connection', function connection(ws) {
+  console.log("connection ...");
+  //on connect message
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+    ws.send(`Hello, you sent -> ${message}`);
+  });
+  ws.send('message from server at: ' + new Date());
+});
