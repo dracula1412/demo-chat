@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
 const SocketServer = require('ws').Server;
+var messageService = require('../services/messages');
 
 /**
  * Get port from environment and store in Express.
@@ -97,9 +98,45 @@ const wss = new SocketServer({ server });
 wss.on('connection', function connection(ws) {
   console.log("connection ...");
   //on connect message
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    ws.send(`Hello, you sent -> ${message}`);
+  ws.on('message', async function incoming(data) {
+    const dataObj = JSON.parse(data);
+    switch(dataObj.action) {
+      case 'create': {
+        const message = await messageService.create(dataObj.body);
+        if (message) {
+          ws.send(JSON.stringify(message));
+        } else {
+          ws.send('Create a new message error');
+        }
+        break;
+      }
+      case 'getAll': {
+        const messages = await messageService.findAll();
+        if (messages) {
+          ws.send(JSON.stringify(messages));
+        } else {
+          ws.send('Error when get all messages');
+        }
+        break;
+      }
+      case 'remove': {
+        if (dataObj.id) {
+          const message = await messageService.remove(dataObj.id);
+          if (message) {
+            ws.send(JSON.stringify(message));
+          } else {
+            ws.send(`Error when remove message with id: ${dataObj.id}`);
+          }
+        } else {
+          ws.send('Cannot remove message without id');
+        }
+        break;
+      }
+      default: {
+        ws.send(`Unexpected format -> ${data}`);
+        break;
+      }
+    }
   });
   ws.send('message from server at: ' + new Date());
 });

@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var messagesRouter = require('./routes/messages');
 var blacklistRouter = require('./routes/blackList');
 
 var app = express();
@@ -23,7 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use('/', indexRouter);
-app.use('/messages', messagesRouter);
 app.use('/black-lists', blacklistRouter);
 
 // catch 404 and forward to error handler

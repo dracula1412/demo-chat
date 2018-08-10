@@ -10,7 +10,10 @@ var BlackList = mongoose.model("BlackList", blackListSchema);
 
 router.get('/', function(req, res) {
   BlackList.find(function(err, response) {
-    res.json(response);
+    if (err)
+      res.json({ message: "Database error", type: "error" });
+    else
+      res.json(response);
   });
 });
 
@@ -20,8 +23,8 @@ router.post('/', function(req, res) {
     text: newBlackListInfo.text,
   });
 
-  newBlackList.save(function(err, BlackList){
-    if(err)
+  newBlackList.save(function(err, BlackList) {
+    if (err)
       res.json({ message: "Database error", type: "error" });
     else
       res.json({ message: "New black list added", type: "success", data: newBlackList });
@@ -29,7 +32,7 @@ router.post('/', function(req, res) {
 });
 
 router.delete('/:id', function(req, res){
-  BlackList.findByIdAndRemove(req.params.id, function(err, response){
+  BlackList.findByIdAndRemove(req.params.id, function(err, response) {
     if (err)
       res.json({ message: "Error in deleting record id " + req.params.id });
     else
