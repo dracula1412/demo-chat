@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <div>
     <v-text-field
       v-model="name"
       label="Name"
@@ -8,7 +8,7 @@
     ></v-text-field>
     <v-btn @click="add(name)">submit</v-btn>
     <v-btn @click="clear">clear</v-btn>
-  </form>
+  </div>
 </template>
 
 <script>

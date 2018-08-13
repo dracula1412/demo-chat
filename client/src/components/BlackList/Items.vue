@@ -26,7 +26,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import constain from '@/global-const'
 
 export default {
   name: 'blackListItems',
