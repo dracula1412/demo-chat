@@ -39,13 +39,9 @@ export default {
     this.getBlackList();
   },
   methods: {
-    ...mapActions(['getBlackList']),
+    ...mapActions(['getBlackList', 'removeFromBlacklist']),
     remove: function (id) {
-      console.log('id: ', id);
-      this.list.splice(
-        this.list.findIndex((i) => i._id === id),
-        1,
-      );
+      this.removeFromBlacklist(id);
     }
   },
 }
