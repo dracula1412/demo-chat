@@ -8,7 +8,7 @@
         </v-toolbar>
         <v-list subheader>
           <v-list-tile
-            v-for="item in list"
+            v-for="item in blackList"
             :key="item._id"
           >
             <v-list-tile-content>
@@ -25,20 +25,21 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import constain from '@/global-const'
 
 export default {
   name: 'blackListItems',
-  data: () => ({
-    list: [],
-  }),
+  computed: {
+    ...mapGetters([
+      'blackList',
+    ])
+  },
   mounted: function () {
-    const api = `${constain.SERVER_URL}black-lists`;
-    this.axios.get(api).then((response) => {
-      this.list = response.data;
-    })
+    this.getBlackList();
   },
   methods: {
+    ...mapActions(['getBlackList']),
     remove: function (id) {
       console.log('id: ', id);
       this.list.splice(
