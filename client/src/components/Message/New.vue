@@ -8,6 +8,7 @@
           label="Input a new messages..."
           append-outer-icon="send"
           @click:append-outer="sentMessage(message)"
+          @keyup.enter="sentMessage(message)"
         ></v-text-field>
       </v-flex>
     </v-layout>
@@ -27,8 +28,11 @@ export default {
   }),
   methods: {
     sentMessage: function (message) {
-      this.message = '';
-      this.$emit('newMessage', message)
+      const newMessage = message.trim();
+      if (newMessage.length > 0) {
+        this.message = '';
+        this.$emit('newMessage', newMessage)
+      }
     }
   },
 }
