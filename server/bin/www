@@ -9,6 +9,7 @@ var debug = require('debug')('server:server');
 var http = require('http');
 const SocketServer = require('ws').Server;
 var messageService = require('../services/messages');
+var clients = [];
 
 /**
  * Get port from environment and store in Express.
@@ -79,6 +80,12 @@ function onError(error) {
   }
 }
 
+function sendAll(message) {
+  for (var j=0; j < clients.length; j++) {
+    clients[j].send(message);
+  }
+}
+
 /**
  * Event listener for HTTP server "listening" event.
  */
@@ -96,6 +103,7 @@ const wss = new SocketServer({ server });
 
 //init Websocket ws and handle incoming connect requests
 wss.on('connection', function connection(ws) {
+  clients.push(ws);
   console.log("connection ...");
   //on connect message
   ws.on('message', async function incoming(data) {
@@ -108,7 +116,7 @@ wss.on('connection', function connection(ws) {
             type: 'createMessage',
             data: message,
           }
-          ws.send(JSON.stringify(data));
+          sendAll(JSON.stringify(data));
         } else {
           ws.send('Create a new message error');
         }
@@ -121,7 +129,7 @@ wss.on('connection', function connection(ws) {
           data: messages,
         }
         if (messages) {
-          ws.send(JSON.stringify(data));
+          sendAll(JSON.stringify(data));
         } else {
           ws.send('Error when get all messages');
         }
@@ -135,7 +143,7 @@ wss.on('connection', function connection(ws) {
               type: 'removeMessage',
               data: message,
             }
-            ws.send(JSON.stringify(data));
+            sendAll(JSON.stringify(data));
           } else {
             ws.send(`Error when remove message with id: ${dataObj.id}`);
           }

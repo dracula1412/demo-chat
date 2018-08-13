@@ -26,9 +26,10 @@ let create = async (data) => {
   });
   
   await newMessage.save(function(err, Message) {
-    if (err)
+    if (err) {
       error = true;
       console.log('Database error when create a new message');
+    }
   });
   return error ? undefined : newMessage;
 }
