@@ -16,7 +16,7 @@
 - Add/delete word of blacklist at Webpurify and DB
 
 -------------
-### Instalation
+### Installation
 
 - Install [npm](https://www.npmjs.com/get-npm)
 - Install [mongoDB](https://docs.mongodb.com/manual/installation/)
