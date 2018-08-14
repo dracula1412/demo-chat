@@ -29,7 +29,7 @@
 - Start server:
   > $npm start
 
-Server up and running at port `8080`
+Server up and running at port `8000`
 
 ### Client
 - Go to `client` folder
@@ -38,4 +38,4 @@ Server up and running at port `8080`
 - Start client:
   > $npm run serve
 
-Client up and running at port `8000`
+Client up and running at port `8080`
