@@ -141,7 +141,7 @@ wss.on('connection', function connection(ws) {
           data: messages,
         }
         if (messages) {
-          sendAll(JSON.stringify(data));
+          ws.send(JSON.stringify(data));
         } else {
           ws.send('Error when get all messages');
         }

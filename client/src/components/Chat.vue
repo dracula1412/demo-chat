@@ -23,6 +23,9 @@ export default {
       },
     });
   },
+  mounted: function () {
+    this.getBlackList();
+  },
   destroyed: function () {
     webSocket.close();
   },
@@ -31,7 +34,7 @@ export default {
     MessageList,
   },
   methods: {
-    ...mapActions(['listMessages', 'incomingMessage']),
+    ...mapActions(['listMessages', 'incomingMessage', 'getBlackList']),
     getListMessages: function (messages) {
       this.listMessages(messages);
     },

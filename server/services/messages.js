@@ -1,5 +1,9 @@
 var mongoose = require('mongoose');
 mongoose.connect("mongodb://localhost:27017/chat-demo", { useNewUrlParser: true });
+var { promisify } = require('util');
+var request = promisify(require('request'));
+var _ = require('lodash');
+var WEBPURIFY_URL = require('../global-const').WEBPURIFY_URL
 
 var messageSchema = mongoose.Schema({
   text: String,
@@ -20,9 +24,22 @@ let findAll = async () => {
 
 let create = async (data) => {
   let error;
+  const webpurifyApi = `${WEBPURIFY_URL}&method=webpurify.live.return&text=${data.text}`;
+  let purifyText = [];
+  var res = await request(webpurifyApi).catch(err => console.log(err));
+  if (res && res.body) {
+    const expletive = JSON.parse(res.body).rsp.expletive;
+    if (expletive) {
+      if (typeof(expletive) === 'string') {
+        purifyText.push(expletive);
+      } else {
+        purifyText = expletive;
+      }
+    }
+  }
   var newMessage = new Message({
+    purifyText,
     text: data.text,
-    purifyText: data.purifyText,
   });
   
   await newMessage.save(function(err, Message) {
