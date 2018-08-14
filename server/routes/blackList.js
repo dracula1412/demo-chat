@@ -52,6 +52,8 @@ router.delete('/:id', async function(req, res) {
           if (err)
             res.json({ message: "Error in deleting record id " + req.params.id, type: "error" });
           else
+            // TODO: remove all prohibit word in the existing messages
+            // Reference to `purifyText` field in the `messages` collection
             res.json({ message: "Black list with id " + req.params.id + " removed.", data: response });
         });
       }
