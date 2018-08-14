@@ -15,6 +15,12 @@ export default new Vuex.Store({
     incomingMessage(state, message) {
       state.messages.push(message);
     },
+    removeMessage(state, message) {
+      state.messages.splice(
+        state.messages.findIndex((i) => i._id === message._id),
+        1,
+      );
+    },
     getBlackList(state, blackList) {
       state.blackList = blackList;
     },
@@ -34,6 +40,9 @@ export default new Vuex.Store({
     },
     incomingMessage(context, message) {
       context.commit('incomingMessage', message)
+    },
+    removeMessage(context, message) {
+      context.commit('removeMessage', message)
     },
     getBlackList(context) {
       const api = `${constain.SERVER_URL}black-lists`;

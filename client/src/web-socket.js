@@ -13,6 +13,10 @@ function onMessage(response, actionCreator)
       actionCreator.incomingMessage(dataObj.data);
       break;
     }
+    case 'removeMessage': {
+      actionCreator.removeMessage(dataObj.data);
+      break;
+    }
     default: {
       console.log(`Unexpected data -> ${dataObj}`);
       break;

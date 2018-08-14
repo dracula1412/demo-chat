@@ -13,6 +13,9 @@
           <span v-else style="color: white"> {{word}} </span>
         </span>
       </td>
+      <td class="justify-center layout px-0">
+        <v-icon small @click="deleteMessageById(props.item._id)">delete</v-icon>
+      </td>
     </template>
   </v-data-table>
 </template>
@@ -23,6 +26,9 @@ import webSocket from '@/web-socket'
 
 export default {
   name: 'MessageList',
+  props: {
+    deleteMessage: Function,
+  },
   computed: {
     ...mapGetters([
       'messages',
@@ -37,6 +43,11 @@ export default {
     setTimeout(function() {
       webSocket.send(JSON.stringify({ action: 'getAll' }));
     }, 1000);
+  },
+  methods: {
+    deleteMessageById: function (id) {
+      this.$emit('deleteMessage', id)
+    }
   },
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <NewMessage @newMessage="newMessageViaSocket"/>
-    <MessageList/>
+    <MessageList @deleteMessage="deleteMessageViaSocket"/>
   </div>
 </template>
 
@@ -21,6 +21,9 @@ export default {
       incomingMessage: (message) => {
         this.addNewMessage(message);
       },
+      removeMessage: (message) => {
+        this.deleteMessage(message);
+      }
     });
   },
   mounted: function () {
@@ -34,7 +37,7 @@ export default {
     MessageList,
   },
   methods: {
-    ...mapActions(['listMessages', 'incomingMessage', 'getBlackList']),
+    ...mapActions(['listMessages', 'incomingMessage', 'getBlackList', 'removeMessage']),
     getListMessages: function (messages) {
       this.listMessages(messages);
     },
@@ -43,13 +46,22 @@ export default {
         action: 'create',
         body: {
           text: message,
-          purifyText: message,
         }
+      }
+      webSocket.send(JSON.stringify(data));
+    },
+    deleteMessageViaSocket: function (id) {
+      const data = {
+        id,
+        action: 'remove',
       }
       webSocket.send(JSON.stringify(data));
     },
     addNewMessage: function (message) {
       this.incomingMessage(message);
+    },
+    deleteMessage: function (message) {
+      this.removeMessage(message);
     }
   },
 }
