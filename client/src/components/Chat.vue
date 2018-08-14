@@ -24,7 +24,7 @@ export default {
     });
   },
   destroyed: function () {
-    webSocket.close;
+    webSocket.close();
   },
   components: {
     NewMessage,

@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var request = require('request');
 mongoose.connect("mongodb://localhost:27017/chat-demo", { useNewUrlParser: true });
-var WEBPURIFY_URL = 'http://api1.webpurify.com/services/rest/?api_key=d3fcd3b33d6474b7d01b9e88be4453c8&lang=en&format=json'
+var WEBPURIFY_URL = require('../global-const').WEBPURIFY_URL
 
 var blackListSchema = mongoose.Schema({
   text: String,
