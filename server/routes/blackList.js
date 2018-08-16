@@ -1,17 +1,17 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var request = require('request');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const request = require('request');
 mongoose.connect("mongodb://localhost:27017/chat-demo", { useNewUrlParser: true });
-var WEBPURIFY_URL = require('../global-const').WEBPURIFY_URL
+const WEBPURIFY_URL = require('../global-const').WEBPURIFY_URL
 
-var blackListSchema = mongoose.Schema({
+const blackListSchema = mongoose.Schema({
   text: String,
 });
-var BlackList = mongoose.model("BlackList", blackListSchema);
+const BlackList = mongoose.model("BlackList", blackListSchema);
 
-router.get('/', function(req, res) {
-  BlackList.find(function(err, response) {
+router.get('/', (req, res) => {
+  BlackList.find((err, response) => {
     if (err)
       res.json({ message: "Database error", type: "error" });
     else
@@ -19,18 +19,18 @@ router.get('/', function(req, res) {
   });
 });
 
-router.post('/', function(req, res) {
-  var newBlackListInfo = req.body;
+router.post('/', (req, res) => {
+  const newBlackListInfo = req.body;
   const webpurifyApi = `${WEBPURIFY_URL}&method=webpurify.live.addtoblacklist&word=${newBlackListInfo.text}`;
-  request(webpurifyApi, function (error) {
+  request(webpurifyApi, (error) => {
     if (error) {
       res.json({ message: `Webpurify error when add black list word ${newBlackListInfo.text}`, type: "error" });
     } else {
-      var newBlackList = new BlackList({
+      const newBlackList = new BlackList({
         text: newBlackListInfo.text,
       });
 
-      newBlackList.save(function(err, BlackList) {
+      newBlackList.save((err, BlackList) => {
         if (err)
           res.json({ message: "Database error", type: "error" });
         else
@@ -40,15 +40,15 @@ router.post('/', function(req, res) {
   });
 });
 
-router.delete('/:id', async function(req, res) {
+router.delete('/:id', async (req, res) => {
   const blacklist = await BlackList.findById(req.params.id);
   if (blacklist) {
     const webpurifyApi = `${WEBPURIFY_URL}&method=webpurify.live.removefromblacklist&word=${blacklist.text}`;
-    request(webpurifyApi, function (error) {
+    request(webpurifyApi, (error) => {
       if (error) {
         res.json({ message: `Webpurify error when remove black list word ${blacklist.text}`, type: "error" });
       } else {
-        BlackList.findByIdAndRemove(req.params.id, function(err, response) {
+        BlackList.findByIdAndRemove(req.params.id, (err, response) => {
           if (err)
             res.json({ message: "Error in deleting record id " + req.params.id, type: "error" });
           else

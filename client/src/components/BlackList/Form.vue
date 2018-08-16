@@ -21,14 +21,14 @@ export default {
   }),
   methods: {
     ...mapActions(['addToBlacklist']),
-    add: function(word) {
+    add(word) {
       const blacklist = word.trim();
       if (blacklist.length > 0) {
         this.name = '';
         this.addToBlacklist(blacklist);
       }
     },
-    clear: function () {
+    clear() {
       this.name = '';
     },
   }

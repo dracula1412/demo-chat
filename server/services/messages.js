@@ -1,19 +1,19 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect("mongodb://localhost:27017/chat-demo", { useNewUrlParser: true });
-var { promisify } = require('util');
-var request = promisify(require('request'));
-var _ = require('lodash');
-var WEBPURIFY_URL = require('../global-const').WEBPURIFY_URL
+const { promisify } = require('util');
+const request = promisify(require('request'));
+const _ = require('lodash');
+const WEBPURIFY_URL = require('../global-const').WEBPURIFY_URL
 
-var messageSchema = mongoose.Schema({
+const messageSchema = mongoose.Schema({
   text: String,
   purifyText: String,
 });
-var Message = mongoose.model("Message", messageSchema);
+const Message = mongoose.model("Message", messageSchema);
 
-let findAll = async () => {
+const findAll = async () => {
   let result;
-  await Message.find(function(err, response) {
+  await Message.find((err, response) => {
     if (err)
       console.log('Database error when find all messages');
     else
@@ -22,11 +22,11 @@ let findAll = async () => {
   return result;
 }
 
-let create = async (data) => {
+const create = async (data) => {
   let error;
   const webpurifyApi = `${WEBPURIFY_URL}&method=webpurify.live.return&text=${data.text}`;
   let purifyText = [];
-  var res = await request(webpurifyApi).catch(err => console.log(err));
+  const res = await request(webpurifyApi).catch(err => console.log(err));
   if (res && res.body) {
     const expletive = JSON.parse(res.body).rsp.expletive;
     if (expletive) {
@@ -37,12 +37,12 @@ let create = async (data) => {
       }
     }
   }
-  var newMessage = new Message({
+  const newMessage = new Message({
     purifyText,
     text: data.text,
   });
   
-  await newMessage.save(function(err, Message) {
+  await newMessage.save((err, Message) => {
     if (err) {
       error = true;
       console.log('Database error when create a new message');
@@ -51,9 +51,9 @@ let create = async (data) => {
   return error ? undefined : newMessage;
 }
 
-let remove = async (id) => {
+const remove = async (id) => {
   let result;
-  await Message.findByIdAndRemove(id, function(err, response) {
+  await Message.findByIdAndRemove(id, (err, response) => {
     if (err)
       console.log('Database error when delete a message');
     else
