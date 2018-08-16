@@ -1,5 +1,4 @@
-var websocket;
-var wsUri = "ws://localhost:8000/";
+const wsUri = "ws://localhost:8000/";
 
 const onMessage = (response, actionCreator) =>
 {
@@ -26,17 +25,18 @@ const onMessage = (response, actionCreator) =>
 }
 
 export default {
+  websocket: null,
   init(actionCreator) {
-    websocket = new WebSocket(wsUri);
+    this.websocket = new WebSocket(wsUri);
     // websocket.onopen = (evt) => { onOpen(evt) };
     // websocket.onclose = (evt) => { onClose(evt) };
-    websocket.onmessage = (response) => { onMessage(response, actionCreator) };
+    this.websocket.onmessage = (response) => { onMessage(response, actionCreator) };
     // websocket.onerror = (evt) => { onError(evt) };
   },
   send(evt) {
-    websocket.send(evt);
+    this.websocket.send(evt);
   },
   close() {
-    websocket.close();
+    this.websocket.close();
   }
 }
