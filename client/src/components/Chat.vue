@@ -13,7 +13,7 @@ import webSocket from '@/web-socket'
 
 export default {
   name: 'Chat',
-  beforeMount: function () {
+  beforeMount() {
     webSocket.init({
       receivedMessages: (messages) => {
         this.getListMessages(messages);
@@ -26,10 +26,10 @@ export default {
       }
     });
   },
-  mounted: function () {
+  mounted() {
     this.getBlackList();
   },
-  destroyed: function () {
+  destroyed() {
     webSocket.close();
   },
   components: {
@@ -38,10 +38,10 @@ export default {
   },
   methods: {
     ...mapActions(['listMessages', 'incomingMessage', 'getBlackList', 'removeMessage']),
-    getListMessages: function (messages) {
+    getListMessages(messages) {
       this.listMessages(messages);
     },
-    newMessageViaSocket: function (message) {
+    newMessageViaSocket(message) {
       const data = {
         action: 'create',
         body: {
@@ -50,17 +50,17 @@ export default {
       }
       webSocket.send(JSON.stringify(data));
     },
-    deleteMessageViaSocket: function (id) {
+    deleteMessageViaSocket(id) {
       const data = {
         id,
         action: 'remove',
       }
       webSocket.send(JSON.stringify(data));
     },
-    addNewMessage: function (message) {
+    addNewMessage(message) {
       this.incomingMessage(message);
     },
-    deleteMessage: function (message) {
+    deleteMessage(message) {
       this.removeMessage(message);
     }
   },

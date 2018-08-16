@@ -1,7 +1,7 @@
 var websocket;
 var wsUri = "ws://localhost:8000/";
 
-function onMessage(response, actionCreator)
+const onMessage = (response, actionCreator) =>
 {
   const dataObj = JSON.parse(response.data);
   switch(dataObj.type) {
@@ -18,6 +18,7 @@ function onMessage(response, actionCreator)
       break;
     }
     default: {
+      /* eslint-disable no-console */
       console.log(`Unexpected data -> ${dataObj}`);
       break;
     }
@@ -27,10 +28,10 @@ function onMessage(response, actionCreator)
 export default {
   init(actionCreator) {
     websocket = new WebSocket(wsUri);
-    // websocket.onopen = function(evt) { onOpen(evt) };
-    // websocket.onclose = function(evt) { onClose(evt) };
-    websocket.onmessage = function(response) { onMessage(response, actionCreator) };
-    // websocket.onerror = function(evt) { onError(evt) };
+    // websocket.onopen = (evt) => { onOpen(evt) };
+    // websocket.onclose = (evt) => { onClose(evt) };
+    websocket.onmessage = (response) => { onMessage(response, actionCreator) };
+    // websocket.onerror = (evt) => { onError(evt) };
   },
   send(evt) {
     websocket.send(evt);

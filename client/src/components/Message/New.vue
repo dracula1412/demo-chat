@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
 export default {
   name: 'NewMessage',
   props: {
@@ -27,7 +25,7 @@ export default {
     message: '',
   }),
   methods: {
-    sentMessage: function (message) {
+    sentMessage(message) {
       const newMessage = message.trim();
       if (newMessage.length > 0) {
         this.message = '';

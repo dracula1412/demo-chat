@@ -34,12 +34,12 @@ export default {
       'blackList',
     ])
   },
-  mounted: function () {
+  mounted() {
     this.getBlackList();
   },
   methods: {
     ...mapActions(['getBlackList', 'removeFromBlacklist']),
-    remove: function (id) {
+    remove(id) {
       this.removeFromBlacklist(id);
     }
   },

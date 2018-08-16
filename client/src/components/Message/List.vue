@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import webSocket from '@/web-socket'
 
 export default {
@@ -34,18 +34,18 @@ export default {
       'messages',
       'blackList',
     ]),
-    blackListItems: function() {
+    blackListItems() {
       return this.blackList.map(x => x.text)
     }
   },
-  mounted: function () {
+  mounted() {
     // TODO: webSocket event only sent after socket connection established
-    setTimeout(function() {
+    setTimeout(() => {
       webSocket.send(JSON.stringify({ action: 'getAll' }));
     }, 1000);
   },
   methods: {
-    deleteMessageById: function (id) {
+    deleteMessageById(id) {
       this.$emit('deleteMessage', id)
     }
   },
